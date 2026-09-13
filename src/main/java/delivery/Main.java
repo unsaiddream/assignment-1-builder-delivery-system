@@ -5,21 +5,22 @@ public class Main {
 
         Address dest = new Address("Astana", "Uly Dala", 29);
 
-        DeliveryOrder order = new DeliveryOrder(
-                "ORD-001",
-                "Amazon",
-                "Alex",
-                dest,
-                5.5,
-                DeliveryType.EXPRESS,
-                "Courier-17",
-                90,
-                true,
-                false,
-                true,
-                1
-        );
+        DeliveryOrder order =
+                new DeliveryOrderBuilder(
+                        "order-001",
+                        "YandexEda",
+                        "Sanzhar",
+                        dest
+                )
+                        .withWeight(1.2)
+                        .expressDelivery()
+                        .assignCourier("Serzhan")
+                        .maxDeliveryTimeMinutes(90)
+                        .enableTracking()
+                        .enableInsurance()
+                        .withPriority(1)
+                        .build();
 
-        System.out.println("Delivery order created");
+        System.out.println("delivery order created");
     }
 }
