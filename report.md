@@ -25,3 +25,112 @@ fragile deliveries must be insured
 
 those presets were created using DeliveryDirector class, without director the same Builder sequences would have to be repeated in multiple places 
 
+## Part e - clean code refractoring
+
+BEFORE:
+
+```
+private void validateExpressDelivery(){
+if (deliveryType == DeliveryType.EXPRESS){
+if (courier == null || courier.isBlank()){
+throw new IllegalArgumentException(
+"express delivery require an courier"
+);
+}
+
+        if (maxDeliveryTimeMinutes > 120) {
+            throw new IllegalArgumentException(
+                    "express delivery must be complected within 120 m"
+            );
+        }
+    }
+}
+```
+AFTER:
+
+```
+private void validateExpressDelivery() {
+    if (deliveryType != DeliveryType.EXPRESS) {
+        return;
+    }
+
+    if (courier == null || courier.isBlank()) {
+        throw new IllegalArgumentException(
+                "Express delivery requires an assigned courier"
+        );
+    }
+
+    if (maxDeliveryTimeMinutes > 120) {
+        throw new IllegalArgumentException(
+                "Express delivery must be completed within 120 minutes"
+        );
+    }
+}
+```
+
+Principe Blocks and Indenting, Small Functions
+
+BEFORE:
+```
+return new DeliveryOrderBuilder(
+        orderId,
+        sender,
+        recipient,
+        destination
+)
+        .withWeight(2.0)
+        .maxDeliveryTimeMinutes(1440)
+        .enableTracking()
+        .withPriority(1)
+        .build();
+```
+
+AFTER common method:
+
+```
+private DeliveryOrderBuilder trackedDelivery(
+        String orderId,
+        String sender,
+        String recipient,
+        Address destination
+) {
+    return new DeliveryOrderBuilder(
+            orderId, sender, recipient, destination
+    ).enableTracking();
+}
+```
+
+STANDARD, FRAGILE, EXPRESS:
+
+```
+return trackedDelivery(orderId, sender, recipient, destination)
+        .withWeight(2.0)
+        .maxDeliveryTimeMinutes(1440)
+        .withPriority(1)
+        .build();
+```
+
+Principe Don’t Repeat Yourself, Descriptive Names
+
+BEFORE:
+
+```
+public DeliveryOrderBuilder maxDeliveryTimeMinutes(int minutes) {
+    this.maxDeliveryTimeMinutes = minutes;
+    return this;
+}
+```
+
+AFTER:
+
+```
+public DeliveryOrderBuilder withDeliveryTimeLimitMinutes(int minutes) {
+    this.maxDeliveryTimeMinutes = minutes;
+    return this;
+}
+```
+Principe Use Descriptive Name
+
+Also added validation for required field, cuz up to this point validation did not check no string values and etc
+Secondly i refactored DeliveryOrderBuilder, paste into DeliveryOrder class to prevent creation of order without Builder
+And removed fragile as type in Delivery Type for those caase when delivery is fragile and express at the same time

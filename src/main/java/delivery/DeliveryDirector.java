@@ -1,6 +1,18 @@
 package delivery;
+import delivery.DeliveryOrder.DeliveryOrderBuilder;
 
 public class DeliveryDirector {
+
+    private DeliveryOrderBuilder trackedDelivery(
+            String orderId,
+            String sender,
+            String recipient,
+            Address destination
+    ) {
+        return new DeliveryOrderBuilder(
+                orderId, sender, recipient, destination
+        ).enableTracking();
+    }
 
     public DeliveryOrder createStandardDelivery(
             String orderId,
@@ -8,15 +20,9 @@ public class DeliveryDirector {
             String recipient,
             Address destination
     ) {
-        return new DeliveryOrderBuilder(
-                orderId,
-                sender,
-                recipient,
-                destination
-        )
+        return trackedDelivery(orderId, sender, recipient, destination)
                 .withWeight(2.0)
-                .maxDeliveryTimeMinutes(1440)
-                .enableTracking()
+                .withDeliveryTimeLimitMinutes(1440)
                 .withPriority(1)
                 .build();
     }
@@ -28,17 +34,11 @@ public class DeliveryDirector {
             Address destination,
             String courier
     ) {
-        return new DeliveryOrderBuilder(
-                orderId,
-                sender,
-                recipient,
-                destination
-        )
+        return trackedDelivery(orderId, sender, recipient, destination)
                 .withWeight(2.0)
                 .expressDelivery()
                 .assignCourier(courier)
-                .maxDeliveryTimeMinutes(120)
-                .enableTracking()
+                .withDeliveryTimeLimitMinutes(120)
                 .withPriority(5)
                 .build();
     }
@@ -49,16 +49,10 @@ public class DeliveryDirector {
             String recipient,
             Address destination
     ) {
-        return new DeliveryOrderBuilder(
-                orderId,
-                sender,
-                recipient,
-                destination
-        )
+        return trackedDelivery(orderId, sender, recipient, destination)
                 .withWeight(1.0)
                 .markAsFragile()
                 .enableInsurance()
-                .enableTracking()
                 .withPriority(3)
                 .build();
     }
