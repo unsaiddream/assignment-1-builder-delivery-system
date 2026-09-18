@@ -67,7 +67,66 @@ public class DeliveryOrderBuilder {
         return this;
     }
 
+    private void validateWeight(){
+        if(weightKg <= 0){
+            throw new IllegalArgumentException(
+                    "weight must be greater than 0"
+            );
+        }
+    }
+
+    private void validateDeliveryTime(){
+        if (maxDeliveryTimeMinutes <= 0){
+            throw new IllegalArgumentException(
+                    "delivery time must be greater than 0"
+            );
+        }
+    }
+
+    private void validatePriority() {
+        if (priority < 1 || priority > 5) {
+            throw new IllegalArgumentException(
+                    "priority must be between 1 and 5"
+            );
+        }
+    }
+
+    private void validateExpressDelivery(){
+        if (deliveryType == DeliveryType.EXPRESS){
+            if (courier == null || courier.isBlank()){
+                throw new IllegalArgumentException(
+                        "express delivery require an courier"
+                );
+            }
+
+            if (maxDeliveryTimeMinutes > 120) {
+                throw new IllegalArgumentException(
+                        "express delivery must be complected within 120 m"
+                );
+            }
+        }
+    }
+
+    private void validateFragileDelivery() {
+        if (fragile && !insuranceEnabled) {
+            throw new IllegalArgumentException(
+                    "fragile delivery requires insurance"
+            );
+        }
+    }
+
+    private void validate() {
+        validateWeight();
+        validateDeliveryTime();
+        validatePriority();
+        validateExpressDelivery();
+        validateFragileDelivery();
+    }
+
     public DeliveryOrder build() {
+
+        validate();
+
         return new DeliveryOrder(
                 orderId,
                 sender,
