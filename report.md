@@ -141,3 +141,38 @@ public DeliveryOrderBuilder withDeliveryTimeLimitMinutes(int minutes) {
 Also added validation for required field, cuz up to this point validation did not check no string values and etc
 Secondly i refactored DeliveryOrderBuilder, paste into DeliveryOrder class to prevent creation of order without Builder
 And removed fragile as type in Delivery Type for those caase when delivery is fragile and express at the same time
+
+## Part F
+
+### Decision
+Validation in DeliveryOrderBuilder, build() method calls validate() before creating a DeliveryOrder
+
+DeliveryOrderBuilder is a static class inside DeliveryOrder class, the product constructor is private so external client code must use builder before creating any order
+
+### Alternative
+Other solution i think its perform validation inside the DeliveryOrder constructor, this would make the prosuct responsible for enforcing its own validity  
+
+### Reasoning
+i chose builder validation cuz the builder already stores all configurations and parameters values before construction 
+
+so the private product consturctor prevents external code bypass the builder 
+
+## Part G 
+
+| Builder Role | Your Class | Responsibility                                                                     |
+|---|---|------------------------------------------------------------------------------------|
+| Product | `DeliveryOrder` | stores the completed delivery configuration, has a private constructor.            |
+| Builder | `DeliveryOrder.DeliveryOrderBuilder` | configures optional properties, validates the configuration, and creates the Order |
+| Client | `Main` | requests preset orders from the Director and prints creation messages              |
+| Director | `DeliveryDirector` | defines standard, express, fragile presets using the Builder.                      |
+| Supporting object | `Address` | stores the destination city, street, and house number                              |
+| Supporting enum | `DeliveryType` | represents the delivery types standard and express                                 |
+`Main` uses `DeliveryDirector` to create preset orders and creates an `Address`
+
+`DeliveryDirector` configures `DeliveryOrderBuilder` and returns completed orders
+
+`DeliveryOrderBuilder` is public static class inside `DeliveryOrder`
+
+`DeliveryOrderBuilder` creates `DeliveryOrder` after validation
+
+Builder and Product reference an `Address` and use `DeliveryType`.
