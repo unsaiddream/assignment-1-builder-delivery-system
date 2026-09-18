@@ -27,6 +27,8 @@ those presets were created using DeliveryDirector class, without director the sa
 
 ## Part e - clean code refractoring
 
+I wrote clean code from the begging, so i did not change that much 
+
 BEFORE:
 
 ```
@@ -67,8 +69,10 @@ private void validateExpressDelivery() {
     }
 }
 ```
+1) Early return and exit of code removes the extra level of nesting
+2) Principe Blocks and Indenting, Small Functions
+3) Cuz for regular delivery, the method ends immediately, and the EXPRESS rules are read sequentially
 
-Principe Blocks and Indenting, Small Functions
 
 BEFORE:
 ```
@@ -109,8 +113,9 @@ return trackedDelivery(orderId, sender, recipient, destination)
         .withPriority(1)
         .build();
 ```
-
-Principe Don’t Repeat Yourself, Descriptive Names
+1) Too much repeatative code 
+2) Principe Don’t Repeat Yourself, Descriptive Names
+3) More comfortable and clean to write code without writing same code multiple times 
 
 BEFORE:
 
@@ -129,7 +134,9 @@ public DeliveryOrderBuilder withDeliveryTimeLimitMinutes(int minutes) {
     return this;
 }
 ```
-Principe Use Descriptive Name
+1) Its not cruel but i should use more descriptive and noticeble name for time limit
+2) Principe Use Descriptive Name
+3) Cuz its more noticebale and descriptive which is follow Descriptive Name principle
 
 Also added validation for required field, cuz up to this point validation did not check no string values and etc
 Secondly i refactored DeliveryOrderBuilder, paste into DeliveryOrder class to prevent creation of order without Builder
