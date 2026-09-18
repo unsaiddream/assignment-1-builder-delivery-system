@@ -5,22 +5,24 @@ public class Main {
 
         Address dest = new Address("Astana", "Uly Dala", 29);
 
-        DeliveryOrder order =
-                new DeliveryOrderBuilder(
-                        "order-001",
-                        "YandexEda",
-                        "Sanzhar",
-                        dest
-                )
-                        .withWeight(1.2)
-                        .expressDelivery()
-                        .assignCourier("Serzhan")
-                        .maxDeliveryTimeMinutes(90)
-                        .enableTracking()
-                        .enableInsurance()
-                        .withPriority(1)
-                        .build();
+        DeliveryDirector director = new DeliveryDirector();
 
-        System.out.println("delivery order created");
+        DeliveryOrder standart = director.createStandardDelivery(
+                "ord-001",
+                "YandexEda",
+                "Zhumabay",
+                dest
+        );
+
+        DeliveryOrder express = director.createExpressDelivery("ord-002", "Indrive", "Sanzhar", dest, "Courier-33");
+
+        DeliveryOrder fragile = director.createFragileDelivery("ord-003", "YandexMarket", "Ansar", dest);
+
+
+
+        System.out.println("standart delivery created");
+        System.out.println("express delivery created \uD83C\uDF4C");
+        System.out.println("fragile delivery created");
+
     }
 }
