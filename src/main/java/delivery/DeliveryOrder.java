@@ -42,6 +42,37 @@ public class DeliveryOrder {
         this.insuranceEnabled = insuranceEnabled;
         this.priority = priority;
     }
+    public double getWeightKg() {
+        return weightKg;
+    }
+
+    public DeliveryType getDeliveryType() {
+        return deliveryType;
+    }
+
+    public String getCourier() {
+        return courier;
+    }
+
+    public int getMaxDeliveryTimeMinutes() {
+        return maxDeliveryTimeMinutes;
+    }
+
+    public boolean isTrackingEnabled() {
+        return trackingEnabled;
+    }
+
+    public boolean isFragile() {
+        return fragile;
+    }
+
+    public boolean isInsuranceEnabled() {
+        return insuranceEnabled;
+    }
+
+    public int getPriority() {
+        return priority;
+    }
 
     public static class DeliveryOrderBuilder {
         private final String orderId;
